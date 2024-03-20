@@ -1,30 +1,49 @@
-# React + TypeScript + Vite
+# Three E-Commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 
 
-Currently, two official plugins are available:
+### vite + React + typescript
+`$ npm create vite@latest`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Project Setting
+`$ npm i`
+`$ npm run dev`
 
-## Expanding the ESLint configuration
+#### Three 설치
+`npm install three @types/three @react-three/fiber`
+`npm i @react-three/drei`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+#### tsconfig or vite.config
+`npm i path`
+`npm i node`
+`npm i @types/node`
 
-- Configure the top-level `parserOptions` property like this:
+````
+** tsconfig
+"baseUrl": ".",
+"paths": {
+  "@components/*": ["src/components/*"]
+},
+"types": [
+  "node"
+],
+````
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+````
+** vite.config
+resolve: {
+    alias: [
+      {
+        find: "@src",
+        replacement: path.resolve(__dirname, "src"),
+      },
+      {
+        find: "@components",
+        replacement: path.resolve(__dirname, "src/components")
+      }
+    ]
 }
-```
+````
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+
