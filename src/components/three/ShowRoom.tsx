@@ -1,15 +1,13 @@
 import * as THREE from "three";
-// import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-// import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader } from "@react-three/fiber";
 import { useThree } from "@react-three/fiber";
+import {CameraControls} from "@react-three/drei";
+import {useRef} from "react";
 
 const ShowRoom = () => {
-
-    const { raycaster } = useThree();
-    // const obj = useLoader(OBJLoader, './models/custom.obj');
-    // const fbx = useLoader(FBXLoader, './models/custom.fbx');
+    const cameraContolsRef = useRef<CameraControls>(null!);
+    const { raycaster, camera } = useThree();
     const gltf = useLoader(GLTFLoader, './models/custom.glb');
     const handleShoes = () => {
         const intersects = raycaster.intersectObjects(gltf.scene.children, true);
@@ -21,21 +19,35 @@ const ShowRoom = () => {
             firstObj.material = cloneMat;
 
             const mat = firstObj.material as THREE.MeshStandardMaterial;
-            mat.color = new THREE.Color('red')
+            mat.color = new THREE.Color('red');
+
+
+            // cameraContolsRef.current.setLookAt(
+            //     -2, 0 , 2,
+            //     firstObj.position.x, firstObj.position.y,
+            //     firstObj.position.z,
+            //     true
+            // )
+            cameraContolsRef.current.fitToBox(
+                firstObj,
+                true
+            )
         }
     }
  return (
      <>
-         {/*<primitive object={obj}/>*/}
-         {/*<primitive object={fbx}/>*/}
+         <directionalLight position={[3,3,3]}/>
+         <CameraControls ref={cameraContolsRef}
+             enabled={true}
+                         dollyToCursor={true}
+                         minDistance={0.5}
+                         // maxDistance={10}
+                         infinityDolly={true}
+                         onChange={() => console.log("onChange", camera.position)}
+         />
          <primitive object={gltf.scene}
                     onClick={handleShoes}
          />
-         {/*<mesh rotation={[THREE.MathUtils.degToRad(45), THREE.MathUtils.degToRad(45), 0]}>*/}
-         {/*    <boxGeometry/>*/}
-         {/*    <meshStandardMaterial/>*/}
-
-         {/*</mesh>*/}
      </>
  );
 }
