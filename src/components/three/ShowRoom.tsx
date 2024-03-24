@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import {useFrame, useLoader} from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { useThree } from "@react-three/fiber";
-import {CameraControls, ContactShadows} from "@react-three/drei";
+import { CameraControls } from "@react-three/drei";
 import {useEffect, useRef, useState} from "react";
 
 const ShowRoom = () => {

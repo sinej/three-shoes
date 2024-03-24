@@ -22,6 +22,7 @@
 
     "baseUrl": ".",
     "paths": {
+      "@src/*": ["src/*"],
       "@components/*": ["src/components/*"]
     },
     // npm i node
