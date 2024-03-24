@@ -41,12 +41,12 @@ const ShowRoom = () => {
 
         cameraControlsRef.current.setTarget(0,0,0, false);
         cameraControlsRef.current.addEventListener('sleep', () => {
-            console.log("sleep");
+            // console.log("sleep");
             setIsFitting(false);
 
         });
         cameraControlsRef.current.addEventListener('control', () => {
-            console.log("control")
+            // console.log("control")
             setIsFitting(true);
         });
     })
@@ -127,14 +127,8 @@ const ShowRoom = () => {
                          minDistance={0.5}
                          maxDistance={10}
                          infinityDolly={true}
-                         onChange={() => console.log("onChange", camera.position)}
+                         // onChange={() => )}
          />
-         <mesh position={[1,0.3, 1]}
-               castShadow
-         >
-             <boxGeometry args={[0.5, 0.5]}/>
-             <meshStandardMaterial/>
-         </mesh>
          <mesh position={[0, -0.5, 0]}
                scale={5}
                castShadow
