@@ -1,8 +1,26 @@
-.color-wrapper {
+.color-wrap {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #FFF;
+
+  .color-inner-wrap {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+
+    .list-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
 }

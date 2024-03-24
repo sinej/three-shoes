@@ -2,11 +2,16 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useThree } from "@react-three/fiber";
-import { CameraControls } from "@react-three/drei";
+import {CameraControls, ContactShadows} from "@react-three/drei";
 import {useEffect, useRef, useState} from "react";
+import {useRecoilState} from "recoil";
+import {selectedColorState, selectedMeshState} from "@src/atoms/atoms.ts";
+import Constants from "@src/Constants.ts";
 
 const ShowRoom = () => {
-    const { raycaster, camera } = useThree();
+    const { raycaster, scene } = useThree();
+    const [selectedColor, setSelectedColor] = useRecoilState(selectedColorState);
+    const [selectedMeshName, setSelectedMeshName] = useRecoilState(selectedMeshState);
     const cameraControlsRef = useRef<CameraControls>(null!);
     const gltf = useLoader(GLTFLoader, './models/custom.glb');
     const [isFitting, setIsFitting] = useState(false);
@@ -33,13 +38,13 @@ const ShowRoom = () => {
     // })
 
     useEffect(() => {
-        gltf.scene.children.forEach((shoes) => {
-           shoes.children.forEach((mesh) => {
-               mesh.castShadow = true;
-           })
-        });
+        // gltf.scene.children.forEach((shoes) => {
+        //    shoes.children.forEach((mesh) => {
+        //        mesh.castShadow = true;
+        //    })
+        // });
 
-        cameraControlsRef.current.setTarget(0,0,0, false);
+        // cameraControlsRef.current.setTarget(0,0,0, false);
         cameraControlsRef.current.addEventListener('sleep', () => {
             // console.log("sleep");
             setIsFitting(false);
@@ -51,14 +56,22 @@ const ShowRoom = () => {
         });
     })
 
-
-    let angle = 0;
-    let dis = 1.5;
-    useFrame(() => {
-        if (!isFitting) {
-            cameraControlsRef.current.setPosition(dis * Math.sin(angle),0.8,dis * Math.cos(angle), true)
-            angle = angle + 0.01;
+    useEffect(() => {
+        console.log("selectedColor", selectedColor)
+        if(selectedMeshName !== '') {
+            const obj = scene.getObjectByName(selectedMeshName) as THREE.Mesh;
+            const mat = obj.material as THREE.MeshStandardMaterial;
+            const color = Constants.COLOR_ARR[selectedColor].color;
+            mat.color = new THREE.Color(color);
         }
+    }, [selectedColor]);
+
+
+    useFrame(() => {
+        // if (!isFitting) {
+        //     cameraControlsRef.current.setPosition(dis * Math.sin(angle),0.8,dis * Math.cos(angle), true)
+        //     angle = angle + 0.01;
+        // }
 
         const rightShoes = gltf.scene.children[0];
         const leftShoes = gltf.scene.children[1];
@@ -79,6 +92,7 @@ const ShowRoom = () => {
         const intersects = raycaster.intersectObjects(gltf.scene.children, true);
         if(intersects.length > 0) {
             const firstObj = intersects[0].object as THREE.Mesh;
+            setSelectedMeshName(firstObj.name);
             const firstMat = firstObj.material as THREE.MeshStandardMaterial;
             const cloneMat = firstMat.clone();
 
@@ -87,26 +101,13 @@ const ShowRoom = () => {
             firstObj.material = cloneMat;
 
             const mat = firstObj.material as THREE.MeshStandardMaterial;
-            mat.color = new THREE.Color('red');
+            const color = Constants.COLOR_ARR[selectedColor].color;
+            mat.color = new THREE.Color(Constants.COLOR_ARR[selectedColor].color);
 
             // setIsFitting(true);
             cameraControlsRef.current.fitToBox(
                 firstObj,
                 true
-            ).then(() => {
-                // setIsFitting(false);
-            })
-
-
-            cameraControlsRef.current.fitToBox(
-                firstObj,
-                true,
-                {
-                    paddingLeft: 1,
-                    paddingRight: 1,
-                    paddingBottom: 1,
-                    paddingTop: 1,
-                }
             )
         }
     }
@@ -141,13 +142,13 @@ const ShowRoom = () => {
                     onClick={handleShoes}
          />
 
-         {/*<ContactShadows position={[0,0,0]}*/}
-         {/*                scale={5}*/}
-         {/*                color="#000000"*/}
-         {/*                resolution={512}*/}
-         {/*                opacity={.8}*/}
-         {/*                blur={.5}*/}
-         {/*/>*/}
+         <ContactShadows position={[0,0,0]}
+                         scale={5}
+                         color="#000000"
+                         resolution={512}
+                         opacity={.8}
+                         blur={.5}
+         />
      </>
  );
 }
