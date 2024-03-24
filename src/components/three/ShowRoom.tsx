@@ -66,6 +66,17 @@ const ShowRoom = () => {
         }
     }, [selectedColor]);
 
+    useEffect(() => {
+        gltf.scene.traverse((item, idx) => {
+            if(item.name === 'Vamp_Left') {
+                const itemMat = item.material as THREE.MeshStandardMaterial;
+                const cloneMat = itemMat.clone();
+                item.material = cloneMat;
+                setSelectedMeshName(item.name);
+            }
+        })
+    }, [gltf.scene]);
+
 
     useFrame(() => {
         // if (!isFitting) {
@@ -102,7 +113,11 @@ const ShowRoom = () => {
 
             const mat = firstObj.material as THREE.MeshStandardMaterial;
             const color = Constants.COLOR_ARR[selectedColor].color;
-            mat.color = new THREE.Color(Constants.COLOR_ARR[selectedColor].color);
+            // mat.color = new THREE.Color(Constants.COLOR_ARR[selectedColor].color);
+            mat.emissive = new THREE.Color("#EEE");
+            setTimeout(() => {
+                mat.emissive = new THREE.Color('black');
+            }, 500)
 
             // setIsFitting(true);
             cameraControlsRef.current.fitToBox(

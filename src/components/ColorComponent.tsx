@@ -2,11 +2,12 @@ import { useState } from "react";
 import '@src/shoes.scss';
 import Constants from "@src/Constants.ts";
 import { Box, List, ListItem, IconButton, ListItemText, Typography } from "@mui/material";
-import {selectedColorState} from "@src/atoms/atoms.ts";
+import {selectedColorState, selectedMeshState} from "@src/atoms/atoms.ts";
 import {useRecoilState} from "recoil";
 
 const ColorComponent = () => {
     const [selectedColor, setSelectedColor] = useRecoilState(selectedColorState);
+    const [selectedMeshName, setSelectedMeshName] = useRecoilState(selectedMeshState);
     const padding = 16;
     const btnWidth = 30;
     const width = Constants.COLOR_ARR.length * (btnWidth + padding)
@@ -21,7 +22,7 @@ const ColorComponent = () => {
       <Box className="color-wrap">
         <Box className="color-inner-wrap" style={{width: width}}>
             <Typography className="current-part">
-                {Constants.COLOR_ARR[selectedColor].name}
+                {selectedMeshName}
             </Typography>
 
             <List className="list-wrap">
